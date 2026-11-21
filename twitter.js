@@ -4,7 +4,7 @@
     const KLASOR = "twitter/";          // resimlerin klasörü: pp, header, foto1, foto2, foto3
     const AD = "tae";                   // görünen ad
     const ETIKET = "@taemirci";         // kullanıcı adı
-    const BIO = "affedersiniz ni daha oynatır mısınız nolur gözlüğümü takmamışım";   // biyografi
+    const BIO = "affedersiniz bi daha oynatır mısınız nolur gözlüğümü takmamışım";   // biyografi
     const TAKIP = 88, TAKIPCI = 263;    // takip edilen / takipçi sayısı
     const KATILIM = "Mart 2021 tarihinde katıldı";
 
