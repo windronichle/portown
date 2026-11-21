@@ -60,7 +60,7 @@
                 },
                 { a: "⭕️", b: 858, z: "12 Ekim", y: [] },
                 {
-                    a: "instama post çıkarmaya çalışıyo çok aşığım", b: 944, z: "3 Ekim", y: [
+                    a: "photo by sevgilim jeongguk", b: 944, z: "3 Ekim", y: [
                         {
                             k: "parkjimim", t: "boğazında kalsın", l: 4, z: "7 hf", y: [
                                 { k: "thv", m: "parkjimim", t: "dualarımız bu yönde", l: 2, z: "7 hf" }
@@ -69,7 +69,7 @@
                     ]
                 },
                 {
-                    a: "photo by sevgilim jeongguk", b: 817, z: "24 Eylül", y: [
+                    a: "instama post çıkarmaya çalışıyo çok aşığım", b: 817, z: "24 Eylül", y: [
                         {
                             k: "mnijgguk", t: "beni güldürcen diye düzgün durmuyosun ki", l: 3, z: "9 hf", y: [
                                 { k: "thv", m: "mnijgguk", t: "postun altındaki son iki kelimeyi tekrar oku", l: 5, z: "9 hf" }
