@@ -4,7 +4,7 @@
     const KLASOR = "twitter/";          // resimlerin klasörü: pp, header, foto1, foto2, foto3
     const AD = "tae";                   // görünen ad
     const ETIKET = "@taemirci";         // kullanıcı adı
-    const BIO = "";                     // biyografi
+    const BIO = "affedersiniz ni daha oynatır mısınız nolur gözlüğümü takmamışım";   // biyografi
     const TAKIP = 88, TAKIPCI = 263;    // takip edilen / takipçi sayısı
     const KATILIM = "Mart 2021 tarihinde katıldı";
 
@@ -22,6 +22,7 @@
         { m: "jeongguk arabada ayrılık şarkısına eşlik etti diye bi buçuk saattir omuzlarım düşük oturuyorum", sa: 74.5 },
         { m: "aile babası olmakk... kendi yemeğimden önce oğlumun mamasını aldım o yesin ben doymuş kadar olurum", sa: 77.2 },
         { m: "2021 tesla müzesi ziyaretçi defterine herkes hislerini paylaşmıştı ben bro i got ur tattoo yazıp imzamı çakmıştım geçiciydi ama olsun", sa: 98.9 },
+        { m: "nick wilde judye benim sürüm sensin dediğinde ben ordaydım ruhen fiilen ve feelen", sa: 108.4 },
         { m: "arabanın balatalarının düzenli olarak ağzına sıçan müşteriye ağzına sıçıyon dememek için bu arıza senin araçta kronik ya yalanı sıkıyoz mecbur", sa: 122.3 },
         { m: "mahallede yolu daraltan iki arabayı kaldırıp ittik diye habere çıkmışız yalnız benim sevgilim var", sa: 146.7 },
         { m: "üçlü pizza menüsü söyledim tek başıma yicem sevgilim yanımda değil diye lokmamda boğulmayı umarak yicem", sa: 150.4 },
