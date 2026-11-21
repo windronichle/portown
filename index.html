@@ -40,9 +40,68 @@
 
         #phone #sifre #tuslar button {
             font-size: 30px !important;
-            font-weight: 400 !important;
+            font-weight: 500 !important;
             line-height: 1 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 0 !important;
         }
+
+        #phone #sifre #tuslar button {
+            font-size: 30px !important;
+            font-weight: 500 !important;
+            line-height: 1 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 0 !important;
+        }
+
+            #phone #sifre #tuslar button::after {
+                display: block;
+                font-size: 10px;
+                font-weight: 500;
+                letter-spacing: 2px;
+                line-height: 1;
+                margin-top: 3px;
+                padding-left: 2px;
+                content: "\00a0";
+            }
+
+            #phone #sifre #tuslar button[data-t="2"]::after {
+                content: "ABC";
+            }
+
+            #phone #sifre #tuslar button[data-t="3"]::after {
+                content: "DEF";
+            }
+
+            #phone #sifre #tuslar button[data-t="4"]::after {
+                content: "GHI";
+            }
+
+            #phone #sifre #tuslar button[data-t="5"]::after {
+                content: "JKL";
+            }
+
+            #phone #sifre #tuslar button[data-t="6"]::after {
+                content: "MNO";
+            }
+
+            #phone #sifre #tuslar button[data-t="7"]::after {
+                content: "PQRS";
+            }
+
+            #phone #sifre #tuslar button[data-t="8"]::after {
+                content: "TUV";
+            }
+
+            #phone #sifre #tuslar button[data-t="9"]::after {
+                content: "WXYZ";
+            } 
     </style>
     <style>
         /* ===== HER EKRANA SIĞDIRMA ===== */
@@ -2752,7 +2811,8 @@
                                     const vv = window.visualViewport;
                                     const w = vv ? vv.width : document.documentElement.clientWidth;
                                     const h = vv ? vv.height : document.documentElement.clientHeight;
-                                    const oran = w < 600 ? Math.min(w / 390, h / 844) : Math.min(w / 470, h / 920);
+                                    const dokunmatik = window.matchMedia("(pointer: coarse)").matches;
+                                    const oran = (w < 600 && dokunmatik) ? Math.min(w / 390, h / 844) : Math.min(w / 440, h / 900);
                                     const x = (w - 390 * oran) / 2 + (vv ? vv.offsetLeft : 0);
                                     const y = (h - 844 * oran) / 2 + (vv ? vv.offsetTop : 0);
                                     t.style.setProperty("position", "fixed", "important");
