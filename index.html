@@ -5613,7 +5613,7 @@ window.addEventListener("popstate", function () { if (nfAcik) nfKapat(); });
 
                                     // tavşanlı reels'in görseli sonra gelecek: dosya adını buraya yaz, örn "insta/reel.jpg"
                                     const IG_REEL_GORSEL = "insta/reelsTavsan1.jpg";
-                                    const IG_REEL_ALTYAZI = "tavşan";
+                                    const IG_REEL_ALTYAZI = " ";
 
                                     // yeni mesaj türleri:
                                     //   ["reel", "me"]                      -> paylaşılan reels kartı
@@ -5669,11 +5669,12 @@ window.addEventListener("popstate", function () { if (nfAcik) nfKapat(); });
                                         const d = IG_DM[i];
                                         const mesajlar = d.mesajlar.map(function (m) {
                                             if (m[0] === "saat") return "<div class='ig-saat'>" + kacis(m[1]) + "</div>";
-                                            if (m[0] === "reel") {
-                                                return "<div class='ig-reel " + m[1] + "'>" +
-                                                    "<div class='ig-reel-ust'>" + igAv(m[1] === "me" ? IG_BEN.kullanici : d.kullanici, 24) + kacis(m[1] === "me" ? IG_BEN.kullanici : d.kullanici) + "</div>" +
-                                                    "<div class='ig-reel-gor' style=\"" + arkaplan(IG_REEL_GORSEL) + "\">" + (IG_REEL_GORSEL ? "" : svgIc(IGP.reels, 40, 1.6)) + "</div>" +
-                                                    "<div class='ig-reel-alt'>" + kacis(IG_REEL_ALTYAZI) + "</div></div>";
+                                                       if (m[0] === "reel") {
+                const SAHIP = "rosepetuniverse";
+                return "<div class='ig-reel " + m[1] + "'>" +
+                    "<div class='ig-reel-ust'>" + igAv(SAHIP, 24) + kacis(SAHIP) + "</div>" +
+                    "<div class='ig-reel-gor' style=\"" + arkaplan(IG_REEL_GORSEL) + "\">" + (IG_REEL_GORSEL ? "" : svgIc(IGP.reels, 40, 1.6)) + "</div>" +
+                    (IG_REEL_ALTYAZI ? "<div class='ig-reel-alt'>" + kacis(IG_REEL_ALTYAZI) + "</div>" : "") + "</div>";
                                             }
                                             if (m[0] === "foto") {
                                                 return "<div class='ig-foto " + m[1] + "' style=\"" + arkaplan(m[2]) + "\"></div>";
