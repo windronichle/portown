@@ -43,7 +43,7 @@
                 {
                     a: "hyejin teyzenin kapısını sadece hyejin teyzenin geçebilceği boyutta yapmışlar bu kadın resmen biri", b: 995, z: "6 Kasım", y: [
                         { k: "parkjimim", t: "bu kadın kim ya", l: 5, z: "2 hf", y: [] },
-                        { k: "yoonchipchip", t: "ırak şu falın peşini artık", l: 3, z: "2 hf", y: [] }
+                        { k: "yoonchipchip", t: "bırak şu falın peşini artık", l: 3, z: "2 hf", y: [] }
                     ]
                 },
                 {
@@ -59,7 +59,7 @@
                 },
                 { a: "⭕️", b: 858, z: "12 Ekim", y: [] },
                 {
-                    a: "instama post çıkarmaya çalışıyo çok aşığım", b: 944, z: "3 Ekim", y: [
+                    a: "photo by sevgilim jeongguk", b: 944, z: "3 Ekim", y: [
                         {
                             k: "parkjimim", t: "boğazında kalsın", l: 4, z: "7 hf", y: [
                                 { k: "thv", m: "parkjimim", t: "dualarımız bu yönde", l: 2, z: "7 hf" }
@@ -68,7 +68,7 @@
                     ]
                 },
                 {
-                    a: "photo by sevgilim jeongguk", b: 817, z: "24 Eylül", y: [
+                    a: "instama post çıkarmaya çalışıyo çok aşığım", b: 817, z: "24 Eylül", y: [
                         {
                             k: "mnijgguk", t: "beni güldürcen diye düzgün durmuyosun ki", l: 3, z: "9 hf", y: [
                                 { k: "thv", m: "mnijgguk", t: "postun altındaki son iki kelimeyi tekrar oku", l: 5, z: "9 hf" }
@@ -312,7 +312,7 @@
 .igx-tz.sol{left:0;width:35%}
 .igx-tz.sag{right:0;width:65%}
 .igx-hc{position:absolute;left:0;right:0;bottom:104px;display:flex;justify-content:center;padding:0 22px;pointer-events:none}
-.igx-hc span{background:rgba(0,0,0,.58);padding:8px 14px;border-radius:14px;font-size:16px;line-height:1.3;text-align:center}
+.igx-hc span{padding:8px 14px;font-size:17px;font-weight:500;line-height:1.3;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,.55)}
 .igx-tp{position:absolute;left:12px;bottom:104px;display:none;align-items:center;gap:10px;background:rgba(0,0,0,.6);padding:8px 14px 8px 8px;border-radius:26px;font-size:14px}
 .igx-tp span b{display:block;font-size:13px}
 .igx-tp span small{display:block;font-size:11.5px;color:rgba(255,255,255,.75)}
@@ -760,5 +760,64 @@
             });
         }
         return d.innerHTML;
+    };
+})();
+
+
+/* ===== INSTAGRAM DM: Jimin 3 reels attı + Görüldü ===== */
+(function () {
+    const KULLANICI = "parkjimim";            // DM'deki kullanıcı adı
+    const SAAT = "Bugün 17:40";               // mesajların üstündeki zaman
+    const ZAMAN = "1 sa";                     // DM listesinde görünen zaman
+    const KLASOR = "insta/jimin reels/";      // resimlerin klasörü
+    const GORULDU = true;                     // en altta "Görüldü" yazsın mı
+    // reels1, reels2, reels3 sırasıyla: k = reels'i çeken hesap
+    const REELS = [
+        { dosya: "reels1", k: "kdjfhsdkfhs_01" },
+        { dosya: "reels2", k: "mrvtqzplxk" },
+        { dosya: "reels3", k: "zxcvbn.lkjhg" }
+    ];
+
+    let d = IG_DM.find(function (x) { return x.kullanici === KULLANICI; });
+    if (!d) {
+        d = { kullanici: KULLANICI, avatar: "whatsapp/jimin.jpeg", zaman: ZAMAN, yeni: true, durum: "Şu an aktif", mesajlar: [] };
+        IG_DM.unshift(d);
+    } else { d.zaman = ZAMAN; }
+    d.mesajlar.push(["saat", SAAT]);
+    REELS.forEach(function (r, i) { d.mesajlar.push(["them", "[reels" + (i + 1) + "]"]); });
+    if (GORULDU) d.mesajlar.push(["them", "[goruldu]"]);
+
+    // resim uzantısını kendisi bulur
+    const YOL = REELS.map(function (r) { return encodeURI(KLASOR + r.dosya) + ".jpeg"; });
+    REELS.forEach(function (r, i) {
+        ["jpeg", "jpg", "png", "JPG", "JPEG", "PNG", "webp"].reduceRight(function (sonra, e) {
+            return function () { const im = new Image(); im.onload = function () { YOL[i] = encodeURI(KLASOR + r.dosya) + "." + e; }; im.onerror = sonra; im.src = encodeURI(KLASOR + r.dosya) + "." + e; };
+        }, function () { })();
+    });
+
+    const st = document.createElement("style");
+    st.textContent = `
+#phone .igx-rl{align-self:flex-start;position:relative;width:196px;height:330px;margin:3px 0;border-radius:18px;overflow:hidden;background:#1c1c1e center/cover no-repeat}
+#phone .igx-rl::before{content:"";position:absolute;left:0;right:0;top:0;height:64px;background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,0))}
+#phone .igx-rl::after{content:"";position:absolute;left:0;right:0;bottom:0;height:70px;background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.45))}
+#phone .igx-rl .ub{position:absolute;left:10px;top:10px;z-index:2;display:flex;align-items:center;gap:7px;color:#fff;font-size:13px;font-weight:600;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+#phone .igx-rl .ub i{width:24px;height:24px;border-radius:50%;background:#555;border:1.5px solid #fff;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:11px;font-weight:700}
+#phone .igx-rl .ri{position:absolute;right:10px;top:11px;z-index:2}
+#phone .igx-rl .pl{position:absolute;left:10px;bottom:10px;z-index:2}
+#phone .igx-gor{align-self:flex-end;font-size:12px;color:#a8a8a8;margin:3px 4px 0}
+`;
+    document.head.appendChild(st);
+
+    const IC = "<svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'><rect x='3.5' y='3.5' width='17' height='17' rx='4.5'/><path d='M3.8 8.5h16.4M9 3.6l3 4.9M14.5 3.6l3 4.9'/><path d='M10.2 11.8l4.2 2.4-4.2 2.4z' fill='#fff'/></svg>";
+    const PL = "<svg width='22' height='22' viewBox='0 0 24 24' fill='#fff'><path d='M7 4l13 8-13 8z'/></svg>";
+
+    const _s = igSohbetEkrani;
+    igSohbetEkrani = function (i) {
+        let h = _s(i);
+        REELS.forEach(function (r, n) {
+            h = h.replace(new RegExp("<div class=[\"']ig-b them[\"']>\\[reels" + (n + 1) + "\\]</div>"),
+                "<div class='igx-rl' style=\"background-image:url('" + YOL[n] + "')\"><div class='ub'><i>" + r.k[0].toUpperCase() + "</i>" + r.k + "</div><div class='ri'>" + IC + "</div><div class='pl'>" + PL + "</div></div>");
+        });
+        return h.replace(/<div class=["']ig-b them["']>\[goruldu\]<\/div>/, "<div class='igx-gor'>Görüldü</div>");
     };
 })();
