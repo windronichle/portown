@@ -5393,75 +5393,98 @@ window.addEventListener("popstate", function () { if (nfAcik) nfKapat(); });
     });
 })();
 
-/* ===== GALERİ: VİDEO DESTEĞİ (mp4 / mov / webm) ===== */
+/* ===== GALERİ EKLERİ: video + alt önizleme şeridi + kaydırma efekti ===== */
 (function () {
     const VID = /\.(mp4|mov|webm)$/i;
     const st = document.createElement("style");
-    st.textContent = ".gl-grid>button,.gl-album-g .kp,.gl-buyuk{position:relative;overflow:hidden}" +
-        ".gl-vb{position:absolute;left:5px;bottom:5px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font-size:9px;display:flex;align-items:center;justify-content:center;pointer-events:none;padding-left:1px}";
-    document.head.appendChild(st);
-
-    function kaynak(el) {
-        const m = /url\(["']?([^"')]+)["']?\)/.exec(el.getAttribute("style") || "");
-        return m ? decodeURI(m[1]) : null;
-    }
-    function videoYap(src, buyuk) {
-        const v = document.createElement("video");
-        v.src = src + (buyuk ? "" : "#t=0.1");
-        v.preload = "metadata";
-        v.playsInline = true;
-        v.setAttribute("playsinline", "");
-        if (buyuk) { v.controls = true; v.autoplay = true; v.loop = true; }
-        else { v.muted = true; }
-        v.className = "gl-vid";
-        v.style.cssText = "position:absolute;left:0;top:0;width:100%;height:100%;display:block;background:#000;object-fit:" +
-            (buyuk ? "contain" : "cover") + ";" + (buyuk ? "" : "pointer-events:none");
-        return v;
-    }
-    function duzelt() {
-        XIC.querySelectorAll(".gl-grid>button,.gl-album-g .kp").forEach(function (el) {
-            const s = kaynak(el);
-            const var_ = el.querySelector(".gl-vid");
-            if (s && VID.test(s)) {
-                if (var_) return;
-                el.appendChild(videoYap(s, false));
-                const b = document.createElement("span"); b.className = "gl-vb"; b.textContent = "▶";
-                el.appendChild(b);
-            }
-        });
-        const bu = XIC.querySelector("#gl-buyuk");
-        if (bu) {
-            const s = kaynak(bu), v = bu.querySelector(".gl-vid");
-            if (s && VID.test(s)) {
-                if (v && v.getAttribute("src") === s) return;
-                if (v) v.remove();
-                bu.appendChild(videoYap(s, true));
-            } else if (v) v.remove();
-        }
-    }
-    let bekliyor = false;
-    new MutationObserver(function () {
-        if (bekliyor) return;
-        bekliyor = true;
-        setTimeout(function () { bekliyor = false; duzelt(); }, 0);
-    }).observe(XIC, { childList: true, subtree: true, attributes: true, attributeFilter: ["style"] });
-})();
-
-/* ===== GALERİ: ALTTA MİNİK ÖNİZLEME ŞERİDİ ===== */
-(function () {
-    const VID = /\.(mp4|mov|webm)$/i;
-    const st = document.createElement("style");
-    st.textContent = ".gl-sirit{flex:none;display:flex;align-items:center;gap:2px;height:54px;padding:0 50%;overflow-x:auto;scrollbar-width:none;scroll-behavior:smooth;background:#000}" +
+    st.textContent =
+        ".gl-sayac{display:none!important}" +
+        ".gl-grid>button,.gl-album-g .kp,.gl-buyuk{position:relative;overflow:hidden}" +
+        ".gl-vb{position:absolute;left:5px;bottom:5px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font-size:9px;display:flex;align-items:center;justify-content:center;pointer-events:none;padding-left:1px}" +
+        ".gl-trk{position:absolute;left:0;top:0;width:100%;height:100%;background:#000;overflow:hidden}" +
+        ".gl-rl{position:absolute;left:0;top:0;width:100%;height:100%;will-change:transform}" +
+        ".gl-sl{position:absolute;top:0;width:100%;height:100%;background-repeat:no-repeat;background-position:center;background-size:contain}" +
+        ".gl-sl video{width:100%;height:100%;object-fit:contain;display:block;background:#000}" +
+        ".gl-sirit{flex:none;display:flex;align-items:center;gap:2px;height:54px;padding:0 50%;overflow-x:auto;scrollbar-width:none;scroll-behavior:smooth;background:#000}" +
         ".gl-sirit::-webkit-scrollbar{display:none}" +
         ".gl-sirit button{flex:none;position:relative;overflow:hidden;width:26px;height:40px;border:0;padding:0;cursor:pointer;background-color:#2c2c2e;background-size:cover;background-position:center;transition:width .15s,height .15s}" +
         ".gl-sirit button.ak{width:40px;height:50px}" +
         ".gl-sirit video{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;pointer-events:none}";
     document.head.appendChild(st);
 
-    function sirit() {
+    function kaynak(el) {
+        const m = /url\(["']?([^"')]+)["']?\)/.exec(el.getAttribute("style") || "");
+        return m ? decodeURI(m[1]) : null;
+    }
+    function kucukVideo(src, kare) {
+        const v = document.createElement("video");
+        v.src = src + "#t=0.1"; v.muted = true; v.preload = "metadata";
+        v.playsInline = true; v.setAttribute("playsinline", "");
+        v.style.cssText = kare;
+        return v;
+    }
+
+    /* --- albüm / ızgara karelerindeki videolar --- */
+    function kareler() {
+        XIC.querySelectorAll(".gl-grid>button,.gl-album-g .kp").forEach(function (el) {
+            const s = kaynak(el);
+            if (!s || !VID.test(s) || el.querySelector("video")) return;
+            el.appendChild(kucukVideo(s, "position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;pointer-events:none"));
+            const b = document.createElement("span"); b.className = "gl-vb"; b.textContent = "▶";
+            el.appendChild(b);
+        });
+    }
+
+    /* --- büyük görünüm: 3 slayt (önceki / şimdiki / sonraki) --- */
+    function slayt(f, d) {
+        const sl = document.createElement("div");
+        sl.className = "gl-sl";
+        sl.style.left = (d * 100) + "%";
+        if (VID.test(f)) {
+            const v = document.createElement("video");
+            v.src = d === 0 ? f : f + "#t=0.1";
+            v.preload = "metadata"; v.playsInline = true; v.setAttribute("playsinline", "");
+            if (d === 0) { v.controls = true; v.autoplay = true; v.loop = true; }
+            else v.muted = true;
+            sl.appendChild(v);
+        } else {
+            sl.style.backgroundImage = "url('" + f + "')";
+        }
+        return sl;
+    }
+    function ciz(trk, g) {
+        const rl = document.createElement("div");
+        rl.className = "gl-rl";
+        [-1, 0, 1].forEach(function (d) {
+            const f = g.liste[g.j + d];
+            if (f) rl.appendChild(slayt(f, d));
+        });
+        trk.innerHTML = "";
+        trk.appendChild(rl);
+        trk.__j = g.j; trk.__liste = g.liste;
+    }
+    function rlAl() { return XIC.querySelector(".gl-rl"); }
+
+    function bgYaz(g) {
+        const bu = XIC.querySelector("#gl-buyuk");
+        if (bu) bu.setAttribute("style", "background:url('" + g.liste[g.j] + "') center / contain no-repeat #000");
+        const sy = XIC.querySelector(".gl-sayac");
+        if (sy) sy.textContent = (g.j + 1) + " / " + g.liste.length;
+    }
+
+    function senkron() {
+        kareler();
         const g = window.GLX && window.GLX();
         const bu = XIC.querySelector("#gl-buyuk");
         if (!g || !bu) return;
+        let trk = bu.querySelector(".gl-trk");
+        if (!trk) { trk = document.createElement("div"); trk.className = "gl-trk"; bu.appendChild(trk); }
+        if (trk.__j !== g.j || trk.__liste !== g.liste) ciz(trk, g);
+        sirit(g, bu);
+    }
+
+    /* --- alttaki küçük önizleme şeridi --- */
+    function sirit(g, bu) {
         let s = XIC.querySelector(".gl-sirit");
         if (s && s.__liste !== g.liste) { s.remove(); s = null; }
         if (!s) {
@@ -5471,13 +5494,8 @@ window.addEventListener("popstate", function () { if (nfAcik) nfKapat(); });
             g.liste.forEach(function (f, j) {
                 const b = document.createElement("button");
                 b.dataset.sj = j;
-                if (VID.test(f)) {
-                    const v = document.createElement("video");
-                    v.src = f + "#t=0.1"; v.muted = true; v.preload = "metadata";
-                    b.appendChild(v);
-                } else {
-                    b.style.backgroundImage = "url('" + f + "')";
-                }
+                if (VID.test(f)) b.appendChild(kucukVideo(f, ""));
+                else b.style.backgroundImage = "url('" + f + "')";
                 s.appendChild(b);
             });
             s.addEventListener("click", function (e) {
@@ -5485,10 +5503,7 @@ window.addEventListener("popstate", function () { if (nfAcik) nfKapat(); });
                 if (!b) return;
                 const gg = window.GLX();
                 gg.j = +b.dataset.sj;
-                const big = XIC.querySelector("#gl-buyuk");
-                if (big) big.setAttribute("style", "background:url('" + gg.liste[gg.j] + "') center / contain no-repeat #000");
-                const sy = XIC.querySelector(".gl-sayac");
-                if (sy) sy.textContent = (gg.j + 1) + " / " + gg.liste.length;
+                bgYaz(gg);
             });
             bu.parentNode.insertBefore(s, bu.nextSibling);
         }
@@ -5497,15 +5512,68 @@ window.addEventListener("popstate", function () { if (nfAcik) nfKapat(); });
             const eski = s.querySelector(".ak");
             if (eski) eski.classList.remove("ak");
             bt.classList.add("ak");
-            const hedef = bt.offsetLeft - s.clientWidth / 2 + 20;
-            s.scrollLeft = hedef;
+            s.scrollLeft = bt.offsetLeft - s.clientWidth / 2 + 20;
         }
     }
+
+    /* --- parmağı takip eden kaydırma --- */
+    let sur = null;
+    window.addEventListener("pointerdown", function (e) {
+        if (xUyg !== "fotograflar") return;
+        const bu = e.target.closest && e.target.closest("#gl-buyuk");
+        const g = window.GLX && window.GLX();
+        if (!bu || !g) return;
+        if (e.target.tagName === "VIDEO") {
+            const r = e.target.getBoundingClientRect();
+            if (e.clientY > r.bottom - 64) return;               // video kontrol çubuğuna dokunuldu
+        }
+        e.stopPropagation();                                     // eski kaydırma kodu devreye girmesin
+        sur = { x: e.clientX, t: Date.now(), dx: 0, w: bu.clientWidth || 390 };
+    }, true);
+    window.addEventListener("pointermove", function (e) {
+        if (!sur) return;
+        const g = window.GLX && window.GLX();
+        const rl = rlAl();
+        if (!g || !rl) return;
+        let dx = e.clientX - sur.x;
+        if ((g.j === 0 && dx > 0) || (g.j === g.liste.length - 1 && dx < 0)) dx *= 0.35;
+        sur.dx = dx;
+        rl.style.transition = "none";
+        rl.style.transform = "translateX(" + dx + "px)";
+    });
+    function birak() {
+        if (!sur) return;
+        const g = window.GLX && window.GLX();
+        const rl = rlAl();
+        const dx = sur.dx, w = sur.w, hiz = Math.abs(dx) / Math.max(1, Date.now() - sur.t);
+        sur = null;
+        if (!g || !rl) return;
+        const yon = dx < 0 ? 1 : -1;
+        const var_ = g.liste[g.j + yon] !== undefined;
+        if (var_ && (Math.abs(dx) > w * 0.25 || (Math.abs(dx) > 30 && hiz > 0.4))) {
+            rl.style.transition = "transform .22s ease-out";
+            rl.style.transform = "translateX(" + (-yon * w) + "px)";
+            setTimeout(function () {
+                if (window.GLX() !== g) return;
+                g.j += yon;
+                bgYaz(g);
+                const trk = XIC.querySelector(".gl-trk");
+                if (trk) ciz(trk, g);
+                sirit(g, XIC.querySelector("#gl-buyuk"));
+            }, 230);
+        } else {
+            rl.style.transition = "transform .2s ease-out";
+            rl.style.transform = "translateX(0)";
+        }
+    }
+    window.addEventListener("pointerup", birak);
+    window.addEventListener("pointercancel", birak);
+
     let bk = false;
     new MutationObserver(function () {
         if (bk) return;
         bk = true;
-        setTimeout(function () { bk = false; sirit(); }, 0);
+        setTimeout(function () { bk = false; senkron(); }, 0);
     }).observe(XIC, { childList: true, subtree: true, attributes: true, attributeFilter: ["style"] });
 })();
     </script>
