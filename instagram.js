@@ -44,7 +44,7 @@
                 {
                     a: "hyejin teyzenin kapısını sadece hyejin teyzenin geçebilceği boyutta yapmışlar bu kadın resmen biri", b: 995, z: "6 Kasım", y: [
                         { k: "parkjimim", t: "bu kadın kim ya", l: 5, z: "2 hf", y: [] },
-                        { k: "yoonchipchip", t: "ırak şu falın peşini artık", l: 3, z: "2 hf", y: [] }
+                        { k: "yoonchipchip", t: "bırak şu falın peşini artık", l: 3, z: "2 hf", y: [] }
                     ]
                 },
                 {
