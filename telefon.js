@@ -1,3 +1,4 @@
+
 /* ===== TELEFON: "Ara"ya basınca iPhone gibi arama ekranı (gerçek arama yapılmaz) ===== */
 (function () {
     const st = document.createElement("style");
@@ -150,21 +151,10 @@
         son.style.backgroundImage = "url(" + c.toDataURL("image/jpeg", .7) + ")";
     });
 
-    // çıkış: alttan yukarı kaydır (çizgiye basmakla çıkmaz)
-    const faz2 = document.getElementById("phone");
-    let czY = null;
-    el.querySelector(".tb").style.touchAction = "none";
-    document.querySelector(".cizgi").style.touchAction = "none";
-    document.querySelector(".cizgi").addEventListener("click", function (e) { if (acik) { e.stopImmediatePropagation(); e.preventDefault(); } }, true);
-    window.addEventListener("pointerdown", function (e) {
-        if (!acik) return;
-        const r = faz2.getBoundingClientRect();
-        czY = e.clientY > r.bottom - r.height * 0.12 ? e.clientY : null;
-    }, true);
-    window.addEventListener("pointerup", function (e) {
-        if (acik && czY !== null && czY - e.clientY > 40) kapat();
-        czY = null;
-    }, true);
+    // çıkış: alttaki çizgiye bas ya da aşağıdan yukarı kaydır
+    document.querySelector(".cizgi").addEventListener("click", function (e) { if (acik) { e.stopImmediatePropagation(); kamKapat(); } }, true);
+    el.addEventListener("pointerdown", function (e) { bas = e.clientY; });
+    el.addEventListener("pointerup", function (e) {
         const r = faz.getBoundingClientRect();
         if (bas !== null && bas - e.clientY > 60 && bas > r.bottom - r.height * 0.14) kamKapat();
         bas = null;
@@ -208,6 +198,8 @@
 
 /* ===== Kilit ekranı: sadece yukarı kaydırarak açılsın (dokununca açılmasın) ===== */
 document.querySelector(".yukari").style.pointerEvents = "none";
+
+
 
 /* ===== SAAT: Alarm ekranı (iPhone gibi) ===== */
 (function () {
@@ -294,12 +286,15 @@ document.querySelector(".yukari").style.pointerEvents = "none";
     };
 })();
 
-/* ===== Alttaki çizgi her ekranın üstünde görünsün (Saat, Kamera, Arama) ===== */
+
+/* ===== Alttaki çizgi her uygulamanın üstünde kalsın ===== */
 (function () {
     const z = document.createElement("style");
     z.textContent = "#phone .cizgi{z-index:80 !important}";
     document.head.appendChild(z);
 })();
+
+
 
 /* ===== TİKTOK: yukarı kaydırmalı video akışı (beğeni + yorum) ===== */
 (function () {
@@ -521,10 +516,25 @@ document.querySelector(".yukari").style.pointerEvents = "none";
         if (v.paused) { oynat(i); gos.classList.remove("g"); } else { v.pause(); gos.classList.add("g"); }
     });
 
-    // çıkış: alttaki çizgiye bas ya da alt çubuktan yukarı kaydır
-    document.querySelector(".cizgi").addEventListener("click", function (e) { if (acik) { e.stopImmediatePropagation(); kapat(); } }, true);
-    el.querySelector(".tb").addEventListener("pointerdown", function (e) { bas = e.clientY; });
-    el.addEventListener("pointerup", function (e) { if (bas !== null && bas - e.clientY > 50) kapat(); bas = null; });
+    // çıkış: alttan yukarı kaydır (çizgiye basmakla çıkmaz)
+    const faz2 = document.getElementById("phone");
+    let czY = null, czSon = 0;
+    el.querySelector(".tb").style.touchAction = "none";
+    document.querySelector(".cizgi").style.touchAction = "none";
+    document.querySelector(".cizgi").addEventListener("click", function (e) { if (acik) { e.stopImmediatePropagation(); e.preventDefault(); } }, true);
+    window.addEventListener("pointerdown", function (e) {
+        if (!acik) return;
+        const r = faz2.getBoundingClientRect();
+        czY = e.clientY > r.bottom - r.height * 0.16 ? e.clientY : null;
+        czSon = e.clientY;
+    }, true);
+    window.addEventListener("pointermove", function (e) { if (czY !== null) czSon = e.clientY; }, true);
+    function czBitir(e) {
+        if (acik && czY !== null && czY - (e.clientY || czSon) > 35) kapat();
+        czY = null;
+    }
+    window.addEventListener("pointerup", czBitir, true);
+    window.addEventListener("pointercancel", czBitir, true);
     window.addEventListener("popstate", function () { if (acik) kapat(); });
 
     const _uygAc = uygAc;
