@@ -137,3 +137,87 @@
         return h;
     };
 })();
+
+
+/* ===== TWITTER: tweetleri favlama (kalbe basınca kırmızı olur, sayı artar) ===== */
+(function () {
+    const st = document.createElement("style");
+    st.textContent = `
+#phone .tw .twx-k{cursor:pointer;transition:color .15s}
+#phone .tw .twx-k.on{color:#f91880}
+#phone .tw .twx-k.on svg{fill:#f91880;stroke:#f91880;animation:twxp .32s}
+@keyframes twxp{0%{transform:scale(.7)}50%{transform:scale(1.35)}100%{transform:scale(1)}}
+`;
+    document.head.appendChild(st);
+
+    // alt satırdaki kalp artık tıklanabilir
+    const _ey = twEylem;
+    twEylem = function (t) {
+        return _ey(t).replace("<span>" + svgIc(P.kalp, 18), "<span class='twx-k" + (t.fav ? " on" : "") + "' data-twk='" + t.id + "'>" + svgIc(P.kalp, 18));
+    };
+
+    XAPP.addEventListener("click", function (e) {
+        const k = e.target.closest("[data-twk]");
+        if (!k || xUyg !== "twitter") return;
+        e.stopPropagation();                 // tweet detayını açmasın
+        const t = TWEETLER.find(function (x) { return x.id === +k.getAttribute("data-twk"); });
+        if (!t) return;
+        t.fav = !t.fav;
+        t.begeni = Math.max(0, (t.begeni || 0) + (t.fav ? 1 : -1));
+        XIC.querySelectorAll("[data-twk='" + t.id + "']").forEach(function (el) {
+            el.classList.toggle("on", t.fav);
+            const eski = el.querySelector("i");
+            if (eski) eski.remove();
+            if (t.begeni) el.insertAdjacentHTML("beforeend", "<i>" + t.begeni + "</i>");
+        });
+        // tweet detay sayfasındaki "Beğeni" sayısı
+        XIC.querySelectorAll(".tw-ist span").forEach(function (s) {
+            if (/Beğeni/.test(s.textContent)) { const b = s.querySelector("b"); if (b) b.textContent = t.begeni; }
+        });
+    }, true);
+})();
+
+
+/* ===== TWITTER: tweete yanıt yazma (sayfa yenilenince sıfırlanır) ===== */
+(function () {
+    const st = document.createElement("style");
+    st.textContent = `
+#phone .tw .tw-yb input{flex:1;min-width:0;height:38px;border-radius:19px;border:0;background:#16181c;color:#e7e9ea;padding:0 14px;font-size:16px;font-family:inherit;outline:0;caret-color:#1d9bf0}
+#phone .tw .tw-yb input::placeholder{color:#71767b}
+#phone .tw .tw-yb .twx-gon{font-size:15px;font-weight:700;color:#1d9bf0;opacity:.45;cursor:pointer}
+#phone .tw .tw-yb.dolu .twx-gon{opacity:1}
+`;
+    document.head.appendChild(st);
+
+    // "Yanıtını gönder" çubuğu yazı kutusu olsun
+    const _d = twDetay;
+    twDetay = function (id) {
+        return _d(id).replace(/<div class='tw-yb'>([\s\S]*?)Yanıtını gönder<\/div>/,
+            "<div class='tw-yb'>$1<input id='twx-in' type='text' placeholder='Yanıtını gönder' autocomplete='off' autocorrect='off' enterkeyhint='send'><span class='twx-gon'>Yanıtla</span></div>");
+    };
+
+    function gonder() {
+        const inp = XIC.querySelector("#twx-in"), ust = twYigin[twYigin.length - 1];
+        if (!inp || !ust || ust.t !== "tweet") return;
+        const metin = inp.value.trim();
+        if (!metin) return;
+        const t = TWEETLER.find(function (x) { return x.id === ust.id; });
+        if (!t) return;
+        t.yorumlar = t.yorumlar || [];
+        t.yorumlar.push({ k: "ben", zaman: "şimdi", metin: metin });
+        t.yorum = (t.yorum !== undefined ? t.yorum : 0) + 1;
+        xCiz(0);
+        const g = XIC.querySelector(".x-govde");
+        if (g) g.scrollTop = g.scrollHeight;
+    }
+
+    XAPP.addEventListener("click", function (e) {
+        if (xUyg === "twitter" && e.target.closest(".twx-gon")) gonder();
+    });
+    XAPP.addEventListener("keydown", function (e) {
+        if (xUyg === "twitter" && e.target.id === "twx-in" && e.key === "Enter") { e.preventDefault(); gonder(); }
+    });
+    XAPP.addEventListener("input", function (e) {
+        if (xUyg === "twitter" && e.target.id === "twx-in") e.target.parentNode.classList.toggle("dolu", e.target.value.trim().length > 0);
+    });
+})();
