@@ -150,10 +150,21 @@
         son.style.backgroundImage = "url(" + c.toDataURL("image/jpeg", .7) + ")";
     });
 
-    // çıkış: alttaki çizgiye bas ya da aşağıdan yukarı kaydır
-    document.querySelector(".cizgi").addEventListener("click", function (e) { if (acik) { e.stopImmediatePropagation(); kamKapat(); } }, true);
-    el.addEventListener("pointerdown", function (e) { bas = e.clientY; });
-    el.addEventListener("pointerup", function (e) {
+    // çıkış: alttan yukarı kaydır (çizgiye basmakla çıkmaz)
+    const faz2 = document.getElementById("phone");
+    let czY = null;
+    el.querySelector(".tb").style.touchAction = "none";
+    document.querySelector(".cizgi").style.touchAction = "none";
+    document.querySelector(".cizgi").addEventListener("click", function (e) { if (acik) { e.stopImmediatePropagation(); e.preventDefault(); } }, true);
+    window.addEventListener("pointerdown", function (e) {
+        if (!acik) return;
+        const r = faz2.getBoundingClientRect();
+        czY = e.clientY > r.bottom - r.height * 0.12 ? e.clientY : null;
+    }, true);
+    window.addEventListener("pointerup", function (e) {
+        if (acik && czY !== null && czY - e.clientY > 40) kapat();
+        czY = null;
+    }, true);
         const r = faz.getBoundingClientRect();
         if (bas !== null && bas - e.clientY > 60 && bas > r.bottom - r.height * 0.14) kamKapat();
         bas = null;
@@ -195,13 +206,8 @@
 })();
 
 
-/* ===== Kilit ekranı: alta dokununca şifre ekranı açılsın ===== */
-document.getElementById("phone").addEventListener("click", function (e) {
-    const r = this.getBoundingClientRect();
-    if (this.classList.contains("acildi")) return;
-    if (document.getElementById("sifre").classList.contains("acik")) return;
-    if (e.clientY > r.bottom - 90 * (r.height / 844)) sifreAc();
-});
+/* ===== Kilit ekranı: sadece yukarı kaydırarak açılsın (dokununca açılmasın) ===== */
+document.querySelector(".yukari").style.pointerEvents = "none";
 
 /* ===== SAAT: Alarm ekranı (iPhone gibi) ===== */
 (function () {
