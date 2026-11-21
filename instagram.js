@@ -1,3 +1,4 @@
+
 /* ===== INSTAGRAM: profiller, gönderiler, yorumlar, hikâyeler (thv = taehyung) ===== */
 (function () {
     /* ---------- BURAYI DÜZENLE ---------- */
@@ -43,7 +44,7 @@
                 {
                     a: "hyejin teyzenin kapısını sadece hyejin teyzenin geçebilceği boyutta yapmışlar bu kadın resmen biri", b: 995, z: "6 Kasım", y: [
                         { k: "parkjimim", t: "bu kadın kim ya", l: 5, z: "2 hf", y: [] },
-                        { k: "yoonchipchip", t: "bırak şu falın peşini artık", l: 3, z: "2 hf", y: [] }
+                        { k: "yoonchipchip", t: "ırak şu falın peşini artık", l: 3, z: "2 hf", y: [] }
                     ]
                 },
                 {
@@ -59,7 +60,7 @@
                 },
                 { a: "⭕️", b: 858, z: "12 Ekim", y: [] },
                 {
-                    a: "photo by sevgilim jeongguk", b: 944, z: "3 Ekim", y: [
+                    a: "instama post çıkarmaya çalışıyo çok aşığım", b: 944, z: "3 Ekim", y: [
                         {
                             k: "parkjimim", t: "boğazında kalsın", l: 4, z: "7 hf", y: [
                                 { k: "thv", m: "parkjimim", t: "dualarımız bu yönde", l: 2, z: "7 hf" }
@@ -68,7 +69,7 @@
                     ]
                 },
                 {
-                    a: "instama post çıkarmaya çalışıyo çok aşığım", b: 817, z: "24 Eylül", y: [
+                    a: "photo by sevgilim jeongguk", b: 817, z: "24 Eylül", y: [
                         {
                             k: "mnijgguk", t: "beni güldürcen diye düzgün durmuyosun ki", l: 3, z: "9 hf", y: [
                                 { k: "thv", m: "mnijgguk", t: "postun altındaki son iki kelimeyi tekrar oku", l: 5, z: "9 hf" }
@@ -248,7 +249,7 @@
 .igx-ozs{display:flex;gap:14px;padding:6px 16px 12px;overflow-x:auto;scrollbar-width:none}
 .igx-ozs::-webkit-scrollbar{display:none}
 .igx-oz{flex:none;width:68px;text-align:center;font-size:12px;cursor:pointer}
-.igx-oz>span{display:flex;align-items:center;justify-content:center;width:64px;height:64px;margin:0 auto 5px;border-radius:50%;border:3.5px solid #363636;background-size:cover;background-position:center;background-color:#1c1c1e;color:#f5f5f5}
+.igx-oz>span{display:flex;align-items:center;justify-content:center;width:64px;height:64px;margin:0 auto 5px;border-radius:50%;border:3px solid #363636;background-size:cover;background-position:center;background-color:#1c1c1e;color:#f5f5f5}
 .igx-oz small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .igx-psek{display:flex;border-top:.5px solid #262626}
 .igx-psek span{flex:1;display:flex;justify-content:center;padding:11px 0;color:#8e8e93}
@@ -731,35 +732,9 @@
 
     const _s = igSohbetEkrani;
     igSohbetEkrani = function (i) {
-        return _s(i).replace(/<div class='ig-b them'>Hikâyene tepki verdi (.*?)<\/div>/g, function (_, e) {
+        return _s(i).replace(/<div class=["']ig-b them["']>Hikâyene tepki verdi (.*?)<\/div>/g, function (_, e) {
             return "<div class='igx-sr'><div class='igx-sr-et'>Hikâyene tepki verdi</div><div class='igx-sr-k' style=\"background-image:url('" + stG + "')\"><span>" + e + "</span></div></div>";
         });
-    };
-})();
-
-/* ===== TELEFON: Son Aramalar düzeni ===== */
-(function () {
-    // son cevapsız aramasının yanında (5) yazacak kişi
-    const NJ = "kim namjoon", NJ_SAYI = 5;
-    // "açılmış" gibi görünecek (kırmızı olmayan) 2 cevapsız arama: ad + zaman (DEĞİŞTİREBİLİRSİN)
-    const ACILMIS = [{ ad: "🤍", zaman: "13:08" }, { ad: "ANNEM", zaman: "Pazartesi" }];
-
-    const _telCiz = telCiz;
-    telCiz = function () {
-        const d = document.createElement("div");
-        d.innerHTML = _telCiz();
-        const satirlar = d.querySelectorAll(".t-satir");
-        const l = ARAMA.filter(function (c) { return telFiltre === "tum" || c.tur === "cevapsiz"; });
-        let njTamam = false;
-        if (telSekme === "aramalar" && satirlar.length === l.length) {
-            l.forEach(function (c, i) {
-                const ad = satirlar[i].querySelector(".t-ad");
-                if (!ad) return;
-                if (c.tur === "cevapsiz" && c.ad === NJ && !njTamam) { ad.textContent = c.ad + " (" + NJ_SAYI + ")"; njTamam = true; }
-                if (c.tur === "cevapsiz" && ACILMIS.some(function (a) { return a.ad === c.ad && a.zaman === c.zaman; })) ad.classList.remove("kirmizi");
-            });
-        }
-        return d.innerHTML;
     };
 })();
 
@@ -771,6 +746,7 @@
     const ZAMAN = "1 sa";                     // DM listesinde görünen zaman
     const KLASOR = "insta/jimin reels/";      // resimlerin klasörü
     const GORULDU = true;                     // en altta "Görüldü" yazsın mı
+    const LISTE_YAZI = "Bir reels paylaştı";  // DM listesinde görünen yazı
     // reels1, reels2, reels3 sırasıyla: k = reels'i çeken hesap
     const REELS = [
         { dosya: "reels1", k: "kdjfhsdkfhs_01" },
@@ -780,12 +756,13 @@
 
     let d = IG_DM.find(function (x) { return x.kullanici === KULLANICI; });
     if (!d) {
-        d = { kullanici: KULLANICI, avatar: "whatsapp/jimin.jpeg", zaman: ZAMAN, yeni: true, durum: "Şu an aktif", mesajlar: [] };
+        d = { kullanici: KULLANICI, avatar: "whatsapp/jimin.jpeg", zaman: ZAMAN, durum: "Şu an aktif", mesajlar: [] };
         IG_DM.unshift(d);
-    } else { d.zaman = ZAMAN; }
+    }
+    d.zaman = ZAMAN;
+    d.yeni = false;                           // okunmuş: liste yazısı kalın olmaz, mavi nokta çıkmaz
     d.mesajlar.push(["saat", SAAT]);
-    REELS.forEach(function (r, i) { d.mesajlar.push(["them", "[reels" + (i + 1) + "]"]); });
-    if (GORULDU) d.mesajlar.push(["them", "[goruldu]"]);
+    REELS.forEach(function () { d.mesajlar.push(["them", LISTE_YAZI]); });
 
     // resim uzantısını kendisi bulur
     const YOL = REELS.map(function (r) { return encodeURI(KLASOR + r.dosya) + ".jpeg"; });
@@ -804,7 +781,7 @@
 #phone .igx-rl .ub i{width:24px;height:24px;border-radius:50%;background:#555;border:1.5px solid #fff;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:11px;font-weight:700}
 #phone .igx-rl .ri{position:absolute;right:10px;top:11px;z-index:2}
 #phone .igx-rl .pl{position:absolute;left:10px;bottom:10px;z-index:2}
-#phone .igx-gor{align-self:flex-end;font-size:12px;color:#a8a8a8;margin:3px 4px 0}
+#phone .igx-gor{align-self:flex-end;font-size:12px;font-weight:400 !important;color:#a8a8a8 !important;margin:3px 4px 0}
 `;
     document.head.appendChild(st);
 
@@ -813,11 +790,13 @@
 
     const _s = igSohbetEkrani;
     igSohbetEkrani = function (i) {
-        let h = _s(i);
-        REELS.forEach(function (r, n) {
-            h = h.replace(new RegExp("<div class=[\"']ig-b them[\"']>\\[reels" + (n + 1) + "\\]</div>"),
-                "<div class='igx-rl' style=\"background-image:url('" + YOL[n] + "')\"><div class='ub'><i>" + r.k[0].toUpperCase() + "</i>" + r.k + "</div><div class='ri'>" + IC + "</div><div class='pl'>" + PL + "</div></div>");
+        let h = _s(i), n = 0;
+        if (IG_DM[i] !== d) return h;
+        return h.replace(new RegExp("<div class=[\"']ig-b them[\"']>" + LISTE_YAZI + "</div>", "g"), function () {
+            const r = REELS[n], son = n === REELS.length - 1;
+            const kart = "<div class='igx-rl' style=\"background-image:url('" + YOL[n] + "')\"><div class='ub'><i>" + r.k[0].toUpperCase() + "</i>" + r.k + "</div><div class='ri'>" + IC + "</div><div class='pl'>" + PL + "</div></div>";
+            n++;
+            return kart + (son && GORULDU ? "<div class='igx-gor'>Görüldü</div>" : "");
         });
-        return h.replace(/<div class=["']ig-b them["']>\[goruldu\]<\/div>/, "<div class='igx-gor'>Görüldü</div>");
     };
 })();
