@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <title>thv's</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        html, body, #phone, #phone *:not(.ig-logo), .x-app, .x-app * {
+            font-family: "Roboto", "Helvetica Neue", Arial, sans-serif !important;
+        }
+
+        .ig-logo {
+            font-family: "Brush Script MT", "Segoe Script", cursive !important;
+        }
+    </style>
     <style>
         /* ===== HER EKRANA SIĞDIRMA ===== */
         html, body {
@@ -2634,7 +2646,6 @@
                 background: #fff;
                 opacity: .85;
             }
-
     </style>
 </head>
 <body>
@@ -5195,6 +5206,7 @@ window.addEventListener("popstate", function () { if (nfAcik) nfKapat(); });
     ];
 
     let glSekme = "kitap", glAlbum = null, glFoto = null, glSt = [];
+    window.GLX = function () { return glFoto; };
 
     const IC = {
         kitap: "<rect x='3' y='3' width='7.5' height='7.5' rx='1.5'/><rect x='13.5' y='3' width='7.5' height='7.5' rx='1.5'/><rect x='3' y='13.5' width='7.5' height='7.5' rx='1.5'/><rect x='13.5' y='13.5' width='7.5' height='7.5' rx='1.5'/>",
@@ -5432,6 +5444,68 @@ window.addEventListener("popstate", function () { if (nfAcik) nfKapat(); });
         if (bekliyor) return;
         bekliyor = true;
         setTimeout(function () { bekliyor = false; duzelt(); }, 0);
+    }).observe(XIC, { childList: true, subtree: true, attributes: true, attributeFilter: ["style"] });
+})();
+
+/* ===== GALERİ: ALTTA MİNİK ÖNİZLEME ŞERİDİ ===== */
+(function () {
+    const VID = /\.(mp4|mov|webm)$/i;
+    const st = document.createElement("style");
+    st.textContent = ".gl-sirit{flex:none;display:flex;align-items:center;gap:2px;height:54px;padding:0 50%;overflow-x:auto;scrollbar-width:none;scroll-behavior:smooth;background:#000}" +
+        ".gl-sirit::-webkit-scrollbar{display:none}" +
+        ".gl-sirit button{flex:none;position:relative;overflow:hidden;width:26px;height:40px;border:0;padding:0;cursor:pointer;background-color:#2c2c2e;background-size:cover;background-position:center;transition:width .15s,height .15s}" +
+        ".gl-sirit button.ak{width:40px;height:50px}" +
+        ".gl-sirit video{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;pointer-events:none}";
+    document.head.appendChild(st);
+
+    function sirit() {
+        const g = window.GLX && window.GLX();
+        const bu = XIC.querySelector("#gl-buyuk");
+        if (!g || !bu) return;
+        let s = XIC.querySelector(".gl-sirit");
+        if (s && s.__liste !== g.liste) { s.remove(); s = null; }
+        if (!s) {
+            s = document.createElement("div");
+            s.className = "gl-sirit";
+            s.__liste = g.liste;
+            g.liste.forEach(function (f, j) {
+                const b = document.createElement("button");
+                b.dataset.sj = j;
+                if (VID.test(f)) {
+                    const v = document.createElement("video");
+                    v.src = f + "#t=0.1"; v.muted = true; v.preload = "metadata";
+                    b.appendChild(v);
+                } else {
+                    b.style.backgroundImage = "url('" + f + "')";
+                }
+                s.appendChild(b);
+            });
+            s.addEventListener("click", function (e) {
+                const b = e.target.closest("button");
+                if (!b) return;
+                const gg = window.GLX();
+                gg.j = +b.dataset.sj;
+                const big = XIC.querySelector("#gl-buyuk");
+                if (big) big.setAttribute("style", "background:url('" + gg.liste[gg.j] + "') center / contain no-repeat #000");
+                const sy = XIC.querySelector(".gl-sayac");
+                if (sy) sy.textContent = (gg.j + 1) + " / " + gg.liste.length;
+            });
+            bu.parentNode.insertBefore(s, bu.nextSibling);
+        }
+        const bt = s.children[g.j];
+        if (bt && !bt.classList.contains("ak")) {
+            const eski = s.querySelector(".ak");
+            if (eski) eski.classList.remove("ak");
+            bt.classList.add("ak");
+            const hedef = bt.offsetLeft - s.clientWidth / 2 + 20;
+            s.scrollLeft = hedef;
+        }
+    }
+    let bk = false;
+    new MutationObserver(function () {
+        if (bk) return;
+        bk = true;
+        setTimeout(function () { bk = false; sirit(); }, 0);
     }).observe(XIC, { childList: true, subtree: true, attributes: true, attributeFilter: ["style"] });
 })();
     </script>
