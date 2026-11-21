@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="utf-8">
@@ -2811,8 +2811,7 @@
                                     const vv = window.visualViewport;
                                     const w = vv ? vv.width : document.documentElement.clientWidth;
                                     const h = vv ? vv.height : document.documentElement.clientHeight;
-                                    const dokunmatik = window.matchMedia("(pointer: coarse)").matches;
-                                    const oran = (w < 600 && dokunmatik) ? Math.min(w / 390, h / 844) : Math.min(w / 440, h / 900);
+                                    const oran = Math.min(w / 410, h / 880);
                                     const x = (w - 390 * oran) / 2 + (vv ? vv.offsetLeft : 0);
                                     const y = (h - 844 * oran) / 2 + (vv ? vv.offsetTop : 0);
                                     t.style.setProperty("position", "fixed", "important");
